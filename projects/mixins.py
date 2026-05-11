@@ -1,13 +1,13 @@
 from http import HTTPStatus
 
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.http import HttpResponseForbidden, JsonResponse
-from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 
+from core.constants import STATUS_ERROR
 from projects.constants import (
     RESPONSE_MSG_ACCESS,
     RESPONSE_MSG_METHOD,
-    STATUS_ERROR,
+    RESPONSE_MSG_NOT_FOUND,
 )
 from projects.models import Project
 
@@ -17,7 +17,10 @@ class ProjectOwnerOnlyMixin(UserPassesTestMixin):
         return self.get_object().owner == self.request.user
 
     def handle_no_permission(self):
-        return HttpResponseForbidden(RESPONSE_MSG_ACCESS)
+        return JsonResponse(
+            {"status": STATUS_ERROR, "message": RESPONSE_MSG_ACCESS},
+            status=HTTPStatus.FORBIDDEN,
+        )
 
 
 class ProjectActionMixin:
@@ -27,7 +30,13 @@ class ProjectActionMixin:
                 {"status": STATUS_ERROR, "message": RESPONSE_MSG_METHOD},
                 status=HTTPStatus.METHOD_NOT_ALLOWED,
             )
+        self._project = Project.objects.filter(pk=self.kwargs["pk"]).first()
+        if self._project is None:
+            return JsonResponse(
+                {"status": STATUS_ERROR, "message": RESPONSE_MSG_NOT_FOUND},
+                status=HTTPStatus.NOT_FOUND,
+            )
         return super().dispatch(request, *args, **kwargs)
 
     def get_project(self):
-        return get_object_or_404(Project, pk=self.kwargs["pk"])
+        return self._project

@@ -1,15 +1,10 @@
-import re
-
 from django import forms
 from django.contrib.auth import authenticate
 
-from core.constants import GITHUB_URL_PATTERN, MSG_GITHUB_INVALID
+from core.utils import clean_github_url, clean_phone
 from users.constants import (
     MSG_GITHUB_TAKEN,
     MSG_INVALID_VALUES,
-    MSG_PHONE_INVALID,
-    MSG_PHONE_TAKEN,
-    PHONE_PATTERN,
 )
 from users.models import User
 
@@ -64,35 +59,16 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ("avatar", "name", "surname", "about", "phone", "github_url")
 
     def clean_phone(self):
-        phone = (self.cleaned_data.get("phone") or "").strip()
-        if not phone:
-            return phone
-
-        if not re.match(PHONE_PATTERN, phone):
-            raise forms.ValidationError(MSG_PHONE_INVALID)
-
-        normalized = "+7" + phone[1:] if phone.startswith("8") else phone
-        if self._field_taken("phone", normalized):
-            raise forms.ValidationError(MSG_PHONE_TAKEN)
-
-        return normalized
+        return clean_phone(
+            self.cleaned_data.get("phone"),
+            model=User,
+            instance_pk=self.instance.pk
+        )
 
     def clean_github_url(self):
-        url = (self.cleaned_data.get("github_url") or "").strip()
-        if not url:
-            return url
-
-        if not re.match(GITHUB_URL_PATTERN, url):
-            raise forms.ValidationError(MSG_GITHUB_INVALID)
-
-        normalized = url.rstrip("/")
-        if self._field_taken("github_url", normalized):
-            raise forms.ValidationError(MSG_GITHUB_TAKEN)
-
-        return normalized
-
-    def _field_taken(self, field, value):
-        queryset = User.objects.filter(**{field: value})
-        if self.instance.pk:
-            queryset = queryset.exclude(pk=self.instance.pk)
-        return queryset.exists()
+        return clean_github_url(
+            self.cleaned_data.get("github_url"),
+            model=User,
+            instance_pk=self.instance.pk,
+            error_msg=MSG_GITHUB_TAKEN
+        )

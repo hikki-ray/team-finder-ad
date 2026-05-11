@@ -4,12 +4,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, View
 
-from core.constants import PAGE_SIZE
+from core.constants import PAGE_SIZE, STATUS_ERROR, STATUS_OK
 from projects.constants import (
     RESPONSE_MSG_ACCESS,
     RESPONSE_MSG_INACTIVE,
-    STATUS_ERROR,
-    STATUS_OK,
 )
 from projects.forms import ProjectCreateEditForm
 from projects.mixins import ProjectActionMixin, ProjectOwnerOnlyMixin

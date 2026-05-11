@@ -24,5 +24,12 @@ AVATAR_BG_PALETTE = [
     COLOR_INDIGO,
 ]
 
+PHONE_PATTERN = r"(8\d{10}|\+7\d{10})"
+MSG_PHONE_INVALID = "Введите корректный номер телефона: 8XXXXXXXXXX или +7XXXXXXXXXX"
+MSG_PHONE_TAKEN = "Номер телефона уже зарегистрирован"
+
 GITHUB_URL_PATTERN = r"^https?:\/\/(www\.)?github\.com\/[\w\-\.]+(\/[\w\-\.]+)?\/?$"
 MSG_GITHUB_INVALID = "Укажите действительную ссылку на репозиторий GitHub"
+
+STATUS_OK = "ok"
+STATUS_ERROR = "error"

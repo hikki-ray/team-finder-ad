@@ -17,10 +17,6 @@ FILTER_OPTIONS = (
 
 MSG_INVALID_VALUES = "Неверный Email или пароль"
 
-PHONE_PATTERN = r"(8\d{10}|\+7\d{10})"
-MSG_PHONE_INVALID = "Введите корректный номер телефона: 8XXXXXXXXXX или +7XXXXXXXXXX"
-MSG_PHONE_TAKEN = "Номер телефона уже зарегистрирован"
-
 MSG_GITHUB_TAKEN = "Профиль с данной ссылкой на GitHub уже существует"
 
 MSG_EMAIL_TAKEN = "Пользователь с таким Email уже существует"
@@ -28,3 +24,5 @@ MSG_EMAIL_REQUIRED = "Поле Email должно быть заполнено"
 
 MSG_SUPERUSER_STAFF = "Суперпользователь должен иметь is_staff=True"
 MSG_SUPERUSER_SUPERUSER = "Суперпользователь должен иметь is_superuser=True"
+
+RESPONSE_MSG_NOT_FOUND = "Профиль не найден"

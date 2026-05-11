@@ -1,17 +1,21 @@
+from http import HTTPStatus
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView
-from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
-from core.constants import PAGE_SIZE
+from core.constants import PAGE_SIZE, STATUS_ERROR
 from users.constants import (
     FILTER_FAVORITE_AUTHORS,
     FILTER_INTERESTED_USERS,
     FILTER_MY_PARTICIPANTS,
     FILTER_OPTIONS,
     FILTER_PARTICIPATING_AUTHORS,
+    RESPONSE_MSG_NOT_FOUND,
 )
 from users.forms import (
     LoginForm,
@@ -106,11 +110,22 @@ class UserDetailView(DetailView):
     template_name = "users/user-details.html"
     context_object_name = "user"
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(
-            User.objects.prefetch_related("owned_projects__participants"),
-            pk=self.kwargs["pk"]
+    def dispatch(self, request, *args, **kwargs):
+        self._user = (
+            User.objects
+            .prefetch_related("owned_projects__participants")
+            .filter(pk=self.kwargs["pk"])
+            .first()
         )
+        if self._user is None:
+            return JsonResponse(
+                {"status": STATUS_ERROR, "message": RESPONSE_MSG_NOT_FOUND},
+                status=HTTPStatus.NOT_FOUND,
+            )
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        return self._user
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
