@@ -15,7 +15,7 @@ class ProjectCreateEditForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ("name", "description", "github_url", "status")
+        fields = ("name", "description", "github_url")
 
     def clean_github_url(self):
         url = self.cleaned_data["github_url"].strip()

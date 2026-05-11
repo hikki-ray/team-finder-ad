@@ -17,7 +17,7 @@ FILTER_OPTIONS = (
 
 MSG_INVALID_VALUES = "Неверный Email или пароль"
 
-MSG_PHONE_PATTERN = r"(8\d{10}|\+7\d{10})"
+PHONE_PATTERN = r"(8\d{10}|\+7\d{10})"
 MSG_PHONE_INVALID = "Введите корректный номер телефона: 8XXXXXXXXXX или +7XXXXXXXXXX"
 MSG_PHONE_TAKEN = "Номер телефона уже зарегистрирован"
 

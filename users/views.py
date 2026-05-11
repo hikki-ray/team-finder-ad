@@ -1,7 +1,7 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
@@ -107,7 +107,8 @@ class UserDetailView(DetailView):
     context_object_name = "user"
 
     def get_object(self, queryset=None):
-        return User.objects.prefetch_related("owned_projects__participants").get(
+        return get_object_or_404(
+            User.objects.prefetch_related("owned_projects__participants"),
             pk=self.kwargs["pk"]
         )
 

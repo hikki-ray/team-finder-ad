@@ -5,6 +5,6 @@ STATUS_OK = "ok"
 STATUS_ERROR = "error"
 RESPONSE_MSG_METHOD = "Метод не поддерживается"
 RESPONSE_MSG_ACCESS = "Нет доступа"
-RESPONSE_MSG_CLOSED = "Проект закрыт"
+RESPONSE_MSG_INACTIVE = "Проект закрыт"
 
 MSG_GITHUB_TAKEN = "Проект с данной ссылкой на GitHub уже существует"

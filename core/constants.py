@@ -2,6 +2,7 @@ PAGE_SIZE = 9
 
 AVATAR_SIZE = 200
 AVATAR_FONT_SIZE = 100
+AVATAR_FONT = "arial.ttf"
 AVATAR_FILENAME = "avatar_{uuid}.png"
 
 COLOR_WHITE = (255, 255, 255)

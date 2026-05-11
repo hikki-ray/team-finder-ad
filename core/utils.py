@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 from core.constants import (
     AVATAR_BG_PALETTE,
     AVATAR_FILENAME,
+    AVATAR_FONT,
     AVATAR_FONT_SIZE,
     AVATAR_SIZE,
     COLOR_WHITE,
@@ -22,7 +23,7 @@ def generate_avatar(name: str) -> ContentFile:
     canvas = ImageDraw.Draw(image)
 
     try:
-        font = ImageFont.truetype("arial.ttf", AVATAR_FONT_SIZE)
+        font = ImageFont.truetype(AVATAR_FONT, AVATAR_FONT_SIZE)
     except IOError:
         font = ImageFont.load_default()
 

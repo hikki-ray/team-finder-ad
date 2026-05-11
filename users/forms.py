@@ -5,12 +5,11 @@ from django.contrib.auth import authenticate
 
 from core.constants import GITHUB_URL_PATTERN, MSG_GITHUB_INVALID
 from users.constants import (
-    MSG_EMAIL_TAKEN,
     MSG_GITHUB_TAKEN,
     MSG_INVALID_VALUES,
     MSG_PHONE_INVALID,
-    MSG_PHONE_PATTERN,
     MSG_PHONE_TAKEN,
+    PHONE_PATTERN,
 )
 from users.models import User
 
@@ -69,7 +68,7 @@ class ProfileUpdateForm(forms.ModelForm):
         if not phone:
             return phone
 
-        if not re.match(MSG_PHONE_PATTERN, phone):
+        if not re.match(PHONE_PATTERN, phone):
             raise forms.ValidationError(MSG_PHONE_INVALID)
 
         normalized = "+7" + phone[1:] if phone.startswith("8") else phone
@@ -91,12 +90,6 @@ class ProfileUpdateForm(forms.ModelForm):
             raise forms.ValidationError(MSG_GITHUB_TAKEN)
 
         return normalized
-
-    def clean_email(self):
-        email = (self.cleaned_data.get("email") or "").strip().lower()
-        if self._field_taken("email", email):
-            raise forms.ValidationError(MSG_EMAIL_TAKEN)
-        return email
 
     def _field_taken(self, field, value):
         queryset = User.objects.filter(**{field: value})

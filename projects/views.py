@@ -7,7 +7,7 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView, V
 from core.constants import PAGE_SIZE
 from projects.constants import (
     RESPONSE_MSG_ACCESS,
-    RESPONSE_MSG_CLOSED,
+    RESPONSE_MSG_INACTIVE,
     STATUS_ERROR,
     STATUS_OK,
 )
@@ -57,6 +57,7 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     form_class = ProjectCreateEditForm
     template_name = "projects/create-project.html"
+    context_object_name = "project"
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -94,7 +95,7 @@ class ProjectCompleteView(LoginRequiredMixin, ProjectActionMixin, View):
 
         if project.status != ProjectState.ACTIVE:
             return JsonResponse(
-                {"status": STATUS_ERROR, "message": RESPONSE_MSG_CLOSED},
+                {"status": STATUS_ERROR, "message": RESPONSE_MSG_INACTIVE},
                 status=HTTPStatus.BAD_REQUEST,
             )
 
